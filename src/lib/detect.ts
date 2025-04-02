@@ -155,7 +155,22 @@ export async function getClientInfo(request: Request, payload: Record<string, an
   const browser = browserName(userAgent);
   const os = detectOS(userAgent) as string;
   const device = getDevice(payload?.screen, os);
-
+  // 自定义逻辑
+  if (userAgent?.includes('DictoGo') || userAgent?.includes('Delingo')) {
+    //const platform = userAgent.includes('Android') ? 'Android OS' : 'iOS';
+    const browser = userAgent.split('/')[0] + '/' + userAgent.split('/')[1];
+    return {
+      userAgent,
+      browser,
+      os,
+      ip,
+      country,
+      subdivision1,
+      subdivision2,
+      city,
+      device: device,
+    };
+  }
   return { userAgent, browser, os, ip, country, subdivision1, subdivision2, city, device };
 }
 
