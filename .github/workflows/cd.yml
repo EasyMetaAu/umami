@@ -31,10 +31,11 @@ jobs:
         name: Build & push Docker image to ghcr.io for ${{ matrix.db-type }}
         with:
           image: umami
+          registry-folder: easymetaau  # 添加这一行
           tags: ${{ env.tag_major }}, ${{ env.tag_minor }}, ${{ env.tag_patch }}, ${{ env.tag_latest }}
           buildArgs: DATABASE_TYPE=${{ matrix.db-type }}
           registry: ghcr.io
           multiPlatform: true
           platform: linux/amd64,linux/arm64
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.CR_PAT }}
