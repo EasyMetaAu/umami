@@ -1,7 +1,7 @@
 ---
 services:
   umami:
-    image: ghcr.io/EasyMetaAu/umami:postgresql-latest
+    image: ghcr.io/easymetaau/umami:postgresql-latest
     #build: .
     ports:
       - "3030:3000"
