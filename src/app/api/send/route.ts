@@ -30,6 +30,7 @@ const schema = z.object({
     userAgent: z.string().optional(),
     timestamp: z.coerce.number().int().optional(),
     id: z.string().optional(),
+    userId: z.string().optional(),
   }),
 });
 
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
       tag,
       timestamp,
       id,
+      userId,
     } = payload;
 
     // Cache check
@@ -101,7 +103,13 @@ export async function POST(request: Request) {
     const sessionSalt = hash(startOfMonth(createdAt).toUTCString());
     const visitSalt = hash(startOfHour(createdAt).toUTCString());
 
-    const sessionId = id ? uuid(websiteId, id) : uuid(websiteId, ip, userAgent, sessionSalt);
+    // new sessionId
+    let sessionId = '';
+    if (userId) {
+      sessionId = uuid(websiteId, userId);
+    } else {
+      sessionId = uuid(websiteId, ip, userAgent, sessionSalt);
+    }
 
     // Find session
     if (!clickhouse.enabled && !cache?.sessionId) {
