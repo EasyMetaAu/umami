@@ -93,7 +93,9 @@ export async function POST(request: Request) {
       return forbidden();
     }
 
-    const createdAt = timestamp ? new Date(timestamp * 1000) : new Date();
+    const createdAt = timestamp
+      ? new Date(timestamp.toString().length === 10 ? timestamp * 1000 : timestamp)
+      : new Date();
     const now = Math.floor(new Date().getTime() / 1000);
 
     const sessionSalt = hash(startOfMonth(createdAt).toUTCString());
