@@ -18,7 +18,7 @@ jobs:
       - name: Set env
         run: |
           echo "NOW=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
-          
+
       - name: Generate tags
         id: generate_tags
         run: |
@@ -31,7 +31,7 @@ jobs:
         name: Build & push Docker image to ghcr.io for ${{ matrix.db-type }}
         with:
           image: umami
-          registry-folder: easymetaau  # 添加这一行
+          gitHubOrg: easymetaau # 添加这一行
           tags: ${{ env.tag_major }}, ${{ env.tag_minor }}, ${{ env.tag_patch }}, ${{ env.tag_latest }}
           buildArgs: DATABASE_TYPE=${{ matrix.db-type }}
           registry: ghcr.io
