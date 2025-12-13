@@ -155,7 +155,8 @@ export async function getClientInfo(request: Request, payload: Record<string, an
   // 自定义逻辑
   if (userAgent?.includes('DictoGo') || userAgent?.includes('Delingo')) {
     //const platform = userAgent.includes('Android') ? 'Android OS' : 'iOS';
-    const browser = userAgent.split('/')[0] + '/' + userAgent.split('/')[1];
+    const match = userAgent.match(/(DictoGo|Delingo)\/[\d.]+/);
+    const browser = match ? match[0] : 'DictoGo';
     return {
       userAgent,
       browser,
