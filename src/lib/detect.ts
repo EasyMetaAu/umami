@@ -142,6 +142,10 @@ export async function getLocation(ip: string = '', headers: Headers, hasPayloadI
   }
 }
 
+function truncate(str: string | undefined | null, maxLength: number): string | undefined {
+  return str?.substring(0, maxLength);
+}
+
 export async function getClientInfo(request: Request, payload: Record<string, any>) {
   const userAgent = payload?.userAgent || request.headers.get('user-agent');
   const ip = payload?.ip || getIpAddress(request.headers);
@@ -160,15 +164,24 @@ export async function getClientInfo(request: Request, payload: Record<string, an
     return {
       userAgent,
       browser,
-      os,
+      os: truncate(os, 20),
       ip,
       country,
-      region,
+      region: truncate(region, 20),
       city,
-      device: device,
+      device,
     };
   }
-  return { userAgent, browser, os, ip, country, region, city, device };
+  return {
+    userAgent,
+    browser: truncate(browser, 20),
+    os: truncate(os, 20),
+    ip,
+    country,
+    region: truncate(region, 20),
+    city,
+    device,
+  };
 }
 
 export function hasBlockedIp(clientIp: string) {
