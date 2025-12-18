@@ -1,11 +1,24 @@
 name: Create docker images
 
-on: [create]
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Optional image version (e.g. 3.0.0, v3.0.0, or 3.0.0-beta.1)"
+        required: false
+        default: ""
+      include_latest:
+        description: "Include latest tag"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build:
     name: Build, push, and deploy
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -35,7 +48,5 @@ jobs:
           tags: ${{ env.tag_major }}, ${{ env.tag_minor }}, ${{ env.tag_patch }}, ${{ env.tag_latest }}
           buildArgs: DATABASE_TYPE=${{ matrix.db-type }}
           registry: ghcr.io
-          multiPlatform: true
-          platform: linux/amd64,linux/arm64
           username: ${{ github.actor }}
           password: ${{ secrets.CR_PAT }}
