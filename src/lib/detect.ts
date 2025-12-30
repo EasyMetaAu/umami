@@ -125,7 +125,7 @@ export async function getClientInfo(request: Request, payload: Record<string, an
   if (userAgent?.includes('DictoGo') || userAgent?.includes('Delingo')) {
     //const platform = userAgent.includes('Android') ? 'Android OS' : 'iOS';
     const match = userAgent.match(/(DictoGo|Delingo)\/[\d.]+/);
-    const browser = match ? match[0] : 'DictoGo';
+    const browser = match ? match[0] : truncate(userAgent, 20);
     return {
       userAgent,
       browser,
